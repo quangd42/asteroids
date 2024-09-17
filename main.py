@@ -46,9 +46,13 @@ def main():
         for thing in updatable:
             thing.update(dt)
 
-        for a in asteroids:
-            if a.is_collided(player):
+        for asteroid in asteroids:
+            if asteroid.is_collided(player):
                 sys.exit("Game over!")
+            for shot in shots:
+                if shot.is_collided(asteroid):
+                    asteroid.split()
+                    shot.kill()
 
         # Redraw screen
         pygame.display.flip()
