@@ -1,6 +1,7 @@
 import pygame
 
 import constants as const
+from player import Player
 
 
 def main():
@@ -11,14 +12,27 @@ def main():
     print(f"Screen height: {const.SCREEN_HEIGHT}")
     screen = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
 
-    dt = 0
+    dt: float = 0
     clock = pygame.time.Clock()
+
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
+    player = Player(const.SCREEN_WIDTH / 2, const.SCREEN_HEIGHT / 2)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill((0, 0, 0))
+        screen.fill("black")
+
+        # TODO: typing?
+        for thing in drawable:
+            thing.draw(screen)
+        for thing in updatable:
+            thing.update(dt)
+
+        # Redraw screen
         pygame.display.flip()
 
         dt = clock.tick(60) / 1000
